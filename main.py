@@ -1,3 +1,4 @@
+from fastapi.exceptions import RequestValidationError
 from starlette.responses import JSONResponse
 
 from core.exceptions import ApiError
@@ -9,18 +10,6 @@ from fastapi import FastAPI, Request
 
 from apps.edificios.controller import router as edificios_router
 app = FastAPI()
-
-@app.exception_handler(ApiError)
-async def api_error_handler(request: Request, exc: ApiError):
-    return JSONResponse(
-        status_code=exc.status_code,
-        content={
-            "success": False,
-            "msg": exc.detail,
-            "status_code": exc.status_code,
-            "data": None
-        }
-    )
 app.include_router(edificios_router)
 
 @app.get("/")
