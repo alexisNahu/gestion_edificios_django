@@ -1,10 +1,10 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.db import models
 
 # Create your models here.
 
 class Edificios(models.Model):
-    nombre = models.CharField(max_length=20, null=False, blank=False)
+    nombre = models.CharField(max_length=20, null=False, blank=False, validators=[MinLengthValidator(4)])
     descripcion = models.CharField(max_length=100, null=True, blank=True)
     status = models.BooleanField(default=True)
     direccion = models.CharField(max_length=100, null=True, blank=True)
