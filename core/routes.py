@@ -7,3 +7,5 @@ class AppRoutes:
     ABONOS = '/api/abonos'
     RECLAMOS = '/api/reclamos'
     CONTRATOS = '/api/contratos'
+    LOGIN = '/api/auth/login'
+    REGISTER = '/api/auth/register'

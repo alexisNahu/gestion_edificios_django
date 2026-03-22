@@ -1,0 +1,22 @@
+### Login
+POST http://localhost:8000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "12345678"
+}
+
+### Register
+POST http://localhost:8000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "test@test.com",
+  "password": "12345678"
+}
+
+### Logout
+POST http://localhost:8000/api/auth/logout
+Authorization: Bearer {{token}}
