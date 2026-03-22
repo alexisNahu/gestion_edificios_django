@@ -1,4 +1,37 @@
-### Login
+### Login - campo incorrecto
+POST http://localhost:8000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "",
+  "password": "12345678"
+}
+
+###
+
+### Login - password incorrecta
+POST http://localhost:8000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "wrongpassword"
+}
+
+###
+
+### Login - usuario no existe
+POST http://localhost:8000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "noexiste",
+  "password": "12345678"
+}
+
+###
+
+### Login - correcto
 POST http://localhost:8000/api/auth/login
 Content-Type: application/json
 
@@ -7,16 +40,62 @@ Content-Type: application/json
   "password": "12345678"
 }
 
-### Register
+###
+
+### Register - correcto
 POST http://localhost:8000/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "testuser",
+  "username": "testuser2",
+  "email": "test2@test.com",
+  "password": "12345678"
+}
+
+###
+
+### Register - email invalido
+POST http://localhost:8000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser23",
+  "email": "correo-invalido",
+  "password": "12345678"
+}
+
+###
+
+### Register - password muy corta
+POST http://localhost:8000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser80070",
+  "email": "test484545@test.com",
+  "password": "123"
+}
+
+###
+
+### Register - username muy corto
+POST http://localhost:8000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "ab",
   "email": "test@test.com",
   "password": "12345678"
 }
 
-### Logout
-POST http://localhost:8000/api/auth/logout
-Authorization: Bearer {{token}}
+###
+
+### Register - email duplicado
+POST http://localhost:8000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "otrouser",
+  "email": "test@test.com",
+  "password": "12345678"
+}

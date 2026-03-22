@@ -6,7 +6,7 @@ from apps.authentication.schema import TokenPayload
 
 class JWTService:
     @staticmethod
-    def generate_token(user: User, expires_in: int = 1, secret: str = settings.SECRET_KEY) -> str:
+    def generate_token(user: User, expires_in: int = settings.SECRET_REFRESH_KEY, secret: str = settings.SECRET_KEY) -> str:
         payload = TokenPayload(
             id=user.pk,
             username=user.username,

@@ -23,6 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+yr^4#48y^ibwu2+p^bbj*f4)7dj08+j&+1b(xc)7yvp92+2a3'
 SECRET_REFRESH_KEY = 'ñalkjdfñkasdf4a65we4f84a64$%&$/%/$Aa_'
 ALGORITHM = 'HS256'
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+REFRESH_TOKEN_EXPIRE_MINUTES = 60
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

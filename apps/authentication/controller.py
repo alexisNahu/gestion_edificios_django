@@ -30,7 +30,7 @@ async def register(request: RegisterRequest, auth_service: AuthService=Depends(A
     except ApiError as e:
         raise HTTPException(
             status_code=e.status_code,
-            detail={"msg": "Error registrando al usuario "+request, "details": e.detail, "status_code": e.status_code}
+            detail={"msg": "Error registrando al usuario "+request.username, "details": e.detail, "status_code": e.status_code}
         )
 
 

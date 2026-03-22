@@ -25,9 +25,9 @@ class LoginResponse(BaseModel):
 
 class LoginRequest(BaseModel):
     username: str = Field(min_length=8, max_length=50)
-    password: str = Annotated[SecretStr, Field(min_length=8, max_length=100)]
+    password: Annotated[SecretStr, Field(min_length=8, max_length=100)]
 
 class RegisterRequest(BaseModel):
     username: str = Field(min_length=3, max_length=50)
-    email: str = EmailStr
-    password: str = Annotated[SecretStr, Field(min_length=8, max_length=100)]
+    email: EmailStr
+    password: Annotated[SecretStr, Field(min_length=8, max_length=100)]
