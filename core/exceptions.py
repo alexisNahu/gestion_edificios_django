@@ -38,6 +38,6 @@ class InternalServerError(ApiError):
 # Handle error
 def handle_error(e: Exception):
     print(e)
-    if isinstance(e, ApiError):
+    if hasattr(e, 'status_code') and e.status_code < 500:
         raise e
     raise InternalServerError()

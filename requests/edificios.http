@@ -4,16 +4,16 @@
 GET http://localhost:8000/api/edificios
 
 ### Listar con filtro por nombre
-GET http://localhost:8000/api/edificios?nombre=ed2
+GET http://localhost:8000/api/edificios?nombre=To
 
 ### Listar con paginacion
 GET http://localhost:8000/api/edificios?page=2&page_size=2
 
 ### Listar con todos los filtros
-GET http://localhost:8000/api/edificios?nombre=ed2&status=true&page=1&page_size=5
+GET http://localhost:8000/api/edificios?status=true&page=1&page_size=5
 
 ### Obtener edificio por id
-GET http://localhost:8000/api/edificios?id=1
+GET http://localhost:8000/api/edificios?id=8
 
 ### ─── GET ERRORES ────────────────────────────────────
 
@@ -39,7 +39,7 @@ POST http://localhost:8000/api/edificios
 Content-Type: application/json
 
 {
-  "nombre": "Torre Central",
+  "nombre": "Torre Central 22",
   "descripcion": "Edificio de oficinas centrales",
   "status": true,
   "direccion": "Avenida Siempre Viva 123"

@@ -36,3 +36,5 @@ class EdificioFiltros(BaseModel):
     direccion: Optional[str] = Field(default=None, max_length=100)
     page: Optional[int] = Field(default=1)
     page_size: Optional[int] = Field(default=10)
+
+

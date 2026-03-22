@@ -2,21 +2,21 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
+from apps.edificios.edificios.schema import EdificioRespuesta, EdificioCrear, EdificioActualizar
+from apps.edificios.edificios.services import EdificiosService
 from apps.edificios.models import Edificios
-from apps.edificios.schema import EdificioRespuesta, EdificioCrear, EdificioActualizar
-from apps.edificios.services import EdificiosService
 from core.exceptions import ApiError
 from core.routes import AppRoutes
 from core.schemas import ApiResponse
 
-router = APIRouter(tags=['edificios'])
+edificios_router = APIRouter(tags=['edificios'])
 
-@router.get(AppRoutes.EDIFICIOS, response_model=ApiResponse[list[EdificioRespuesta]], status_code=200)
+@edificios_router.get(AppRoutes.EDIFICIOS, response_model=ApiResponse[list[EdificioRespuesta]], status_code=200)
 async def get_edificios(
         id: Optional[int] = Query(default=None, ge=1),
-        nombre: Optional[str] = Query(default=None, min_length=4, max_length=50),
+        nombre: Optional[str] = Query(default=None, max_length=50),
         status: Optional[bool] = Query(default=None),
-        direccion: Optional[str] = Query(default=None, min_length=2, max_length=100),
+        direccion: Optional[str] = Query(default=None, max_length=100),
         page: int = Query(default=1, ge=1),
         page_size: int = Query(default=10, ge=1, le=100),
         edificios_service: EdificiosService = Depends(EdificiosService)
@@ -39,7 +39,7 @@ async def get_edificios(
             detail={"msg": "Error obteniendo edificios", "details": e.detail, "status_code": e.status_code}
         )
 
-@router.post(AppRoutes.EDIFICIOS, response_model=ApiResponse[EdificioRespuesta], status_code=201)
+@edificios_router.post(AppRoutes.EDIFICIOS, response_model=ApiResponse[EdificioRespuesta], status_code=201)
 async def create_edificio(
         payload: EdificioCrear,
         edificios_service: EdificiosService = Depends(EdificiosService)
@@ -54,7 +54,7 @@ async def create_edificio(
             detail={"msg": "Error creando edificios", "details": e.detail, "status_code": e.status_code}
         )
 
-@router.put(f"{AppRoutes.EDIFICIOS}/{{id}}", response_model=ApiResponse[EdificioRespuesta], status_code=200)
+@edificios_router.put(f"{AppRoutes.EDIFICIOS}/{{id}}", response_model=ApiResponse[EdificioRespuesta], status_code=200)
 async def update_edificio(
         id: int,
         payload: EdificioActualizar,
@@ -69,7 +69,7 @@ async def update_edificio(
             detail={"msg": "Error actualizando edificio", "details": e.detail, "status_code": e.status_code}
         )
 
-@router.delete(f"{AppRoutes.EDIFICIOS}/{{id}}", response_model=ApiResponse[EdificioRespuesta], status_code=200)
+@edificios_router.delete(f"{AppRoutes.EDIFICIOS}/{{id}}", response_model=ApiResponse[EdificioRespuesta], status_code=200)
 async def delete_edificio(
         id: int,
         edificios_service: EdificiosService = Depends(EdificiosService)
@@ -82,3 +82,4 @@ async def delete_edificio(
             status_code=e.status_code,
             detail={"msg": "Error eliminando edificio", "details": e.detail, "status_code": e.status_code}
         )
+

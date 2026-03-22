@@ -8,7 +8,8 @@ init_django()  # ← primero
 
 from fastapi import FastAPI, Request
 
-from apps.edificios.controller import router as edificios_router
+from apps.edificios.edificios.controller import edificios_router
+from apps.edificios.departamentos.controller import departamentos_router
 from apps.authentication.controller import router as authentication_router
 app = FastAPI()
 
@@ -19,6 +20,7 @@ async def api_error_handler(request: Request, exc: ApiError):
         content={"msg": exc.detail, "status_code": exc.status_code}
     )
 app.include_router(edificios_router)
+app.include_router(departamentos_router)
 app.include_router(authentication_router)
 
 @app.get("/")
