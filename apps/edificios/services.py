@@ -1,11 +1,7 @@
 from django.core.paginator import Paginator
-from fastapi import params
-
-from apps.edificios.schema import EdificioRespuesta
-from core.exceptions import BadRequestError, handle_error, NotFoundError
-from core.schemas import ApiResponse
+from core.exceptions import handle_error, NotFoundError
 from .repository import EdificiosRepository
-from .schema import EdificioFiltros, EdificioRespuesta
+from .schema import EdificioRespuesta, EdificioActualizar, EdificioCrear
 
 
 class EdificiosService:
@@ -18,7 +14,7 @@ class EdificiosService:
             cleaned_params = {k: v for k, v in kwargs.items() if v is not None}
 
             edificios = await self.repo.select(**cleaned_params)
-            if not edificios: raise NotFoundError('No se encontraron edificios'+str(kwargs))
+            if not edificios: raise NotFoundError('No se encontraron edificios '+str(kwargs))
 
             paginator = Paginator(edificios, page_size)
             pagina = paginator.get_page(page)
@@ -36,15 +32,14 @@ class EdificiosService:
             handle_error(e)
 
 
-    async def create(self, payload):
+    async def create(self, payload: EdificioCrear):
         try:
             cleaned_payload = payload.model_dump(exclude_none=True)
-            edificio = await self.repo.create(**cleaned_payload)
-            return edificio
+            return await self.repo.create(**cleaned_payload)
         except Exception as e:
             raise handle_error(e)
 
-    async def delete(self, id):
+    async def delete(self, id: int):
         try:
             reg = await self.get(id=id)
             was_deleted = await self.repo.delete_by_id(id)
@@ -53,7 +48,7 @@ class EdificiosService:
         except Exception as e:
             raise handle_error(e)
 
-    async def update(self, id: int, payload):
+    async def update(self, id: int, payload: EdificioActualizar):
         try:
             cleaned_payload = payload.model_dump(exclude_none=True)
             new_reg = await self.repo.update(id, **cleaned_payload)

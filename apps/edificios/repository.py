@@ -4,8 +4,8 @@ from core.exceptions import NotFoundError
 
 
 class EdificiosRepository:
-
-    async def select(self, **kwargs):
+    @staticmethod
+    async def select(**kwargs):
         try:
             queryset = Edificios.objects.filter(**kwargs) if kwargs else Edificios.objects.all()
             result = await sync_to_async(list)(queryset)
@@ -18,23 +18,22 @@ class EdificiosRepository:
         except Exception as e:
             print(f'Error selecting edificios: {e}')
             raise e
-
-    async def create(self, **kwargs):
+    @staticmethod
+    async def create(**kwargs):
         try:
             return await sync_to_async(Edificios.objects.create)(**kwargs)
         except Exception as e:
             print(f'Error creating edificios: {e}')
-
-    # repository
-    async def delete_by_id(self, id: int):
+    @staticmethod
+    async def delete_by_id(id: int):
         try:
             deleted, _ = await sync_to_async(Edificios.objects.filter(id=id).delete)()
             return deleted
         except Exception as e:
             print(f'Error deleting edificio: {e}')
             raise e
-
-    async def update(self, id: int, **kwargs):
+    @staticmethod
+    async def update(id: int, **kwargs):
         try:
             queryset = Edificios.objects.filter(id=id)
             await sync_to_async(queryset.update)(**kwargs)

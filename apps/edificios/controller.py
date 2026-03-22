@@ -2,7 +2,8 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from apps.edificios.schema import EdificioFiltros, EdificioRespuesta, EdificioCrear, EdificioActualizar
+from apps.edificios.models import Edificios
+from apps.edificios.schema import EdificioRespuesta, EdificioCrear, EdificioActualizar
 from apps.edificios.services import EdificiosService
 from core.exceptions import ApiError
 from core.routes import AppRoutes
@@ -21,7 +22,7 @@ async def get_edificios(
         edificios_service: EdificiosService = Depends(EdificiosService)
 ):
     try:
-        response = await edificios_service.get(
+        response: ApiResponse[Edificios] = await edificios_service.get(
             id=id,
             nombre=nombre,
             status=status,
@@ -37,6 +38,7 @@ async def get_edificios(
             status_code=e.status_code,
             detail={"msg": "Error obteniendo edificios", "details": e.detail, "status_code": e.status_code}
         )
+
 @router.post(AppRoutes.EDIFICIOS, response_model=ApiResponse[EdificioRespuesta], status_code=201)
 async def create_edificio(
         payload: EdificioCrear,
@@ -44,7 +46,7 @@ async def create_edificio(
 ):
     try:
 
-        edificio = await edificios_service.create(payload)
+        edificio: Edificios = await edificios_service.create(payload)
         return ApiResponse(msg="Edificio creado", data=edificio, status_code=201)
     except ApiError as e:
         raise HTTPException(
@@ -59,7 +61,7 @@ async def update_edificio(
         edificios_service: EdificiosService = Depends(EdificiosService)
 ):
     try:
-        edificio = await edificios_service.update(id, payload)
+        edificio: Edificios = await edificios_service.update(id, payload)
         return ApiResponse(msg="Edificio actualizado", data=edificio, status_code=200)
     except ApiError as e:
         raise HTTPException(
@@ -73,7 +75,7 @@ async def delete_edificio(
         edificios_service: EdificiosService = Depends(EdificiosService)
 ):
     try:
-        response = await edificios_service.delete(id)
+        response: Edificios = await edificios_service.delete(id)
         return ApiResponse(msg="Edificio eliminado correctamente", data=response, status_code=200)
     except ApiError as e:
         raise HTTPException(
