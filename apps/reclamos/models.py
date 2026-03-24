@@ -7,7 +7,7 @@ class Reclamos(models.Model):
         on_delete=models.PROTECT,
         null=False,
         blank=False,
-        db_column='id_contrato',
+        db_column='contrato_id',
         related_name='reclamos'
     )
     descripcion = models.TextField(null=False, blank=False)

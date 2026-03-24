@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('saldo_pendiente', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('status', models.BooleanField(default=True)),
                 ('descripcion', models.TextField(blank=True, null=True)),
-                ('contrato', models.ForeignKey(db_column='id_contrato', on_delete=django.db.models.deletion.CASCADE, to='contratos.contratos')),
+                ('contratos', models.ForeignKey(db_column='id_contrato', on_delete=django.db.models.deletion.CASCADE, to='contratos.contratos')),
             ],
             options={
                 'verbose_name': 'Pago',

@@ -12,6 +12,7 @@ class DepartamentoCrear(BaseModel):
 
 
 class DepartamentoActualizar(BaseModel):
+    edificio_id: Optional[int]
     numero_departamento: Optional[str] = Field(default=None, min_length=1, max_length=20)
     piso: Optional[int] = Field(default=None, ge=0, le=3)
     descripcion: Optional[str] = Field(default=None, max_length=100)

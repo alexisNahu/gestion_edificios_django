@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('descripcion', models.TextField()),
                 ('status', models.BooleanField(default=True)),
                 ('fecha', models.DateField(auto_now_add=True)),
-                ('contrato', models.ForeignKey(db_column='id_contrato', on_delete=django.db.models.deletion.PROTECT, related_name='reclamos', to='contratos.contratos')),
+                ('contratos', models.ForeignKey(db_column='id_contrato', on_delete=django.db.models.deletion.PROTECT, related_name='reclamos', to='contratos.contratos')),
             ],
             options={
                 'verbose_name': 'Reclamo',

@@ -2,37 +2,25 @@
 GET http://localhost:8000/api/departamentos
 Content-Type: application/json
 
-###
-
 ### Obtener departamentos por edificio
 GET http://localhost:8000/api/departamentos?edificio_id=6
 Content-Type: application/json
-
-###
 
 ### Obtener departamentos por piso
 GET http://localhost:8000/api/departamentos?piso=1
 Content-Type: application/json
 
-###
-
 ### Obtener departamentos ocupados
 GET http://localhost:8000/api/departamentos?ocupado=true
 Content-Type: application/json
-
-###
 
 ### Obtener departamentos por edificio y piso
 GET http://localhost:8000/api/departamentos?edificio_id=1&piso=2
 Content-Type: application/json
 
-###
-
 ### Obtener departamento por id
-GET http://localhost:8000/api/departamentos?id=1
+GET http://localhost:8000/api/departamentos?id=11
 Content-Type: application/json
-
-###
 
 ### Crear departamento - correcto
 POST http://localhost:8000/api/departamentos
@@ -41,15 +29,13 @@ Content-Type: application/json
 {
   "numero_departamento": "101",
   "piso": 1,
-  "descripcion": "Departamento con vista al plaza",
+  "descripcion": "Departamento con vista al tuning",
   "edificio_id": 9,
   "status": true,
   "ocupado": false
 }
 
-###
-
-### Crear departamento - piso fuera de rango
+### Crear departamento - piso fuera de rango (Máximo 3)
 POST http://localhost:8000/api/departamentos
 Content-Type: application/json
 
@@ -58,8 +44,6 @@ Content-Type: application/json
   "piso": 5,
   "edificio_id": 1
 }
-
-###
 
 ### Crear departamento - edificio inexistente
 POST http://localhost:8000/api/departamentos
@@ -71,8 +55,6 @@ Content-Type: application/json
   "edificio_id": 9999
 }
 
-###
-
 ### Crear departamento - sin numero_departamento
 POST http://localhost:8000/api/departamentos
 Content-Type: application/json
@@ -81,8 +63,6 @@ Content-Type: application/json
   "piso": 1,
   "edificio_id": 1
 }
-
-###
 
 ### Actualizar departamento - correcto
 PUT http://localhost:8000/api/departamentos/1
@@ -93,8 +73,6 @@ Content-Type: application/json
   "ocupado": true
 }
 
-###
-
 ### Actualizar departamento - id inexistente
 PUT http://localhost:8000/api/departamentos/9999
 Content-Type: application/json
@@ -102,8 +80,6 @@ Content-Type: application/json
 {
   "descripcion": "Departamento renovado"
 }
-
-###
 
 ### Actualizar departamento - piso fuera de rango
 PUT http://localhost:8000/api/departamentos/1
@@ -113,13 +89,18 @@ Content-Type: application/json
   "piso": 10
 }
 
-###
+### Actualizar departamento - edificio vinculado no existe
+PUT http://localhost:8000/api/departamentos/11
+Content-Type: application/json
+
+{
+  "numero_departamento": "101-B",
+  "edificio_id": 999
+}
 
 ### Eliminar departamento - correcto
 DELETE http://localhost:8000/api/departamentos/1
 Content-Type: application/json
-
-###
 
 ### Eliminar departamento - id inexistente
 DELETE http://localhost:8000/api/departamentos/9999

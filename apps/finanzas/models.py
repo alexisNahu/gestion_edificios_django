@@ -7,7 +7,7 @@ class Pagos(models.Model):
         on_delete=models.CASCADE,
         null=False,
         blank=False,
-        db_column='id_contrato',
+        db_column='contrato_id',
     )
     monto_pagado = models.DecimalField(null=False, blank=False, max_digits=10, decimal_places=2)
     saldo_pendiente = models.DecimalField(null=False, blank=False, max_digits=10, decimal_places=2)
@@ -35,7 +35,7 @@ class Abonos(models.Model):
         on_delete=models.CASCADE,
         null=False,
         blank=False,
-        db_column='id_pago',
+        db_column='pago_id',
         related_name='abonos'
     )
     monto = models.DecimalField(null=False, blank=False, max_digits=10, decimal_places=2)
@@ -58,10 +58,10 @@ class Abonos(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        pago = self.pago
-        suma_abonos = Abonos.objects.filter(pago=pago).aggregate(Sum('monto'))['monto__sum'] or 0
-        pago.monto_pagado = suma_abonos
-        pago.save()
+        pago_instancia = self.pago
+        suma_abonos = Abonos.objects.filter(pago=pago_instancia).aggregate(Sum('monto'))['monto__sum'] or 0
+        pago_instancia.monto_pagado = suma_abonos
+        pago_instancia.save()
 
     class Meta:
         db_table = 'abonos'

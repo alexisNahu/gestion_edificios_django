@@ -12,7 +12,7 @@ class Inquilinos(models.Model):
     status = models.BooleanField(default=True)
     telefono = models.CharField(max_length=60)
     email = models.EmailField()
-    numero_identificion = models.CharField(max_length=60)
+    numero_identificacion = models.CharField(max_length=60)
     tipo_identificacion = models.CharField(
         max_length=60,
         choices=TIPO_IDENTIFICACION

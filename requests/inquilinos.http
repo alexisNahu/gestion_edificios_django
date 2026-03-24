@@ -1,0 +1,126 @@
+### Obtener todos los inquilinos
+GET http://localhost:8000/api/inquilinos
+Content-Type: application/json
+
+### Obtener inquilino por id
+GET http://localhost:8000/api/inquilinos?id=2
+Content-Type: application/json
+
+### Obtener inquilinos por nombre
+GET http://localhost:8000/api/inquilinos?nombre_completo=aLex
+Content-Type: application/json
+
+### Obtener inquilinos por tipo de identificacion
+GET http://localhost:8000/api/inquilinos?tipo_identificacion=Cedula
+Content-Type: application/json
+
+### Obtener inquilinos activos
+GET http://localhost:8000/api/inquilinos?status=true
+Content-Type: application/json
+
+### Obtener inquilinos inactivos
+GET http://localhost:8000/api/inquilinos?status=true
+Content-Type: application/json
+
+### Crear inquilino - correcto
+POST http://localhost:8000/api/inquilinos
+Content-Type: application/json
+
+{
+  "nombre_completo": "Juan Perez Lopez saeloo",
+  "status": true,
+  "telefono": "09912345678",
+  "email": "juan@gmail.com",
+  "numero_identificacion": "12345678901",
+  "tipo_identificacion": "Cedula"
+}
+
+### Crear inquilino - numero de identificacion existente
+POST http://localhost:8000/api/inquilinos
+Content-Type: application/json
+
+{
+  "nombre_completo": "Juan Perez Lopez saeloo",
+  "status": true,
+  "telefono": "09912345678",
+  "email": "juan@gmail.com",
+  "numero_identificacion": "1234567890",
+  "tipo_identificacion": "Cedula"
+}
+
+### Crear inquilino - email invalido
+POST http://localhost:8000/api/inquilinos
+Content-Type: application/json
+
+{
+  "nombre_completo": "Juan Perez Lopez",
+  "telefono": "0991234567",
+  "email": "correo-invalido",
+  "numero_identificacion": "1234567890",
+  "tipo_identificacion": "Cedula"
+}
+
+### Crear inquilino - tipo identificacion invalido
+POST http://localhost:8000/api/inquilinos
+Content-Type: application/json
+
+{
+  "nombre_completo": "Juan Perez Lopez",
+  "telefono": "0991234567",
+  "email": "juan@gmail.com",
+  "numero_identificacion": "1234567890",
+  "tipo_identificacion": "DNI"
+}
+
+### Crear inquilino - nombre muy corto
+POST http://localhost:8000/api/inquilinos
+Content-Type: application/json
+
+{
+  "nombre_completo": "Juan",
+  "telefono": "0991234567",
+  "email": "juan@gmail.com",
+  "numero_identificacion": "1234567890",
+  "tipo_identificacion": "Cedula"
+}
+
+### Crear inquilino - sin campos requeridos
+POST http://localhost:8000/api/inquilinos
+Content-Type: application/json
+
+{
+  "nombre_completo": "Juan Perez Lopez 2"
+}
+
+### Actualizar inquilino - correcto
+PUT http://localhost:8000/api/inquilinos/2
+Content-Type: application/json
+
+{
+  "telefono": "0997654321",
+  "status": false
+}
+
+### Actualizar inquilino - id inexistente
+PUT http://localhost:8000/api/inquilinos/9999
+Content-Type: application/json
+
+{
+  "telefono": "0997654321"
+}
+
+### Actualizar inquilino - tipo identificacion invalido
+PUT http://localhost:8000/api/inquilinos/1
+Content-Type: application/json
+
+{
+  "tipo_identificacion": "DNI"
+}
+
+### Eliminar inquilino - correcto
+DELETE http://localhost:8000/api/inquilinos/1
+Content-Type: application/json
+
+### Eliminar inquilino - id inexistente
+DELETE http://localhost:8000/api/inquilinos/9999
+Content-Type: application/json

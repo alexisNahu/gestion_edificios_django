@@ -1,8 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.db import models
 
-# Create your models here.
-
 class Edificios(models.Model):
     nombre = models.CharField(max_length=20, null=False, blank=False, validators=[MinLengthValidator(4)])
     descripcion = models.CharField(max_length=100, null=True, blank=True)
@@ -25,7 +23,7 @@ class Departamentos(models.Model):
         on_delete=models.CASCADE,
         null=False,
         blank=False,
-        db_column='id_edificio'
+        db_column='edificio_id'
     )
     status = models.BooleanField(default=True)
     ocupado = models.BooleanField(default=False)
