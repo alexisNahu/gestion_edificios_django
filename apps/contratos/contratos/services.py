@@ -1,9 +1,8 @@
-from django.core.exceptions import BadRequest
 from fastapi import Depends
 
 from apps.inquilinos.inquilinos.services import InquilinosService
-from core.services import Service
-from core.exceptions import handle_error, BadRequestError, ConflictError
+from core.base.services import Service
+from core.exceptions import handle_error, ConflictError
 from apps.contratos.contratos.repository import ContratosRepository
 from apps.contratos.contratos.schema import (
     ContratoRespuesta,
@@ -28,7 +27,6 @@ class ContratosService(Service[ContratoRespuesta, ContratoCrear, ContratoActuali
         self.departamentos_service = departamentos_service
 
     async def create(self, payload: ContratoCrear):
-        try:
             response = await self.departamentos_service.get(id=payload.departamento_id)
             departamento_relacionado = response['data'][0]
             if departamento_relacionado.ocupado:
@@ -42,11 +40,8 @@ class ContratosService(Service[ContratoRespuesta, ContratoCrear, ContratoActuali
 
             cleaned_payload = payload.model_dump(exclude_none=True)
             return await self.repo.create(**cleaned_payload)
-        except Exception as e:
-            raise handle_error(e)
 
     async def update(self, id: int, payload: ContratoActualizar):
-        try:
             cleaned_payload = payload.model_dump(exclude_none=True)
 
             if "departamento_id" in cleaned_payload:
@@ -65,5 +60,3 @@ class ContratosService(Service[ContratoRespuesta, ContratoCrear, ContratoActuali
             new_reg = await self.repo.update(id, **cleaned_payload)
             return new_reg
 
-        except Exception as e:
-            raise handle_error(e)

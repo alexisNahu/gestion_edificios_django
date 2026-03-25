@@ -1,5 +1,5 @@
 from fastapi import Depends
-from core.services import Service
+from core.base.services import Service
 from .repository import EdificiosRepository
 from .schema import EdificioRespuesta, EdificioCrear, EdificioActualizar
 

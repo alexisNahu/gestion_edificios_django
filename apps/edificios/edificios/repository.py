@@ -1,5 +1,5 @@
 from apps.edificios.models import Edificios
-from core.repository import Repository
+from core.base.repository import Repository
 
 
 class EdificiosRepository(Repository[Edificios]):

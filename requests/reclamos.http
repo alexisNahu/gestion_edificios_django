@@ -1,0 +1,102 @@
+### 1. Obtener todos los reclamos (Paginado)
+GET http://localhost:8000/api/reclamos?page=1&page_size=10
+Accept: application/json
+
+### 2. Filtrar reclamos por descripción (Búsqueda parcial)
+# El Repo aplicará automáticamente __icontains
+GET http://localhost:8000/api/reclamos?descripcion=filtracion
+Accept: application/json
+
+### 3. Filtrar por rango de fechas (Usando los Alias fecha_desde/fecha_hasta)
+GET http://localhost:8000/api/reclamos?fecha_desde=2026-01-01&fecha_hasta=2026-12-31
+Accept: application/json
+
+### 4. Filtrar por estado (Solo reclamos abiertos)
+GET http://localhost:8000/api/reclamos?status=true
+Accept: application/json
+
+### 5. Crear un nuevo reclamo
+# Nota: contrato_id debe existir en la tabla 'contratos'
+POST http://localhost:8000/api/reclamos
+Content-Type: application/json
+
+{
+    "contrato_id": 8,
+    "descripcion": "Problemas con la presión de agua en el baño social.",
+    "status": true
+}
+
+### 6. Actualizar un reclamo (Cerrar el reclamo ID 1)
+# El service ignorará los campos que no envíes (exclude_none=True)
+PUT http://localhost:8000/api/reclamos/1
+Content-Type: application/json
+
+{
+    "status": false
+}
+
+### 7. Eliminar un reclamo por ID
+DELETE http://localhost:8000/api/reclamos/1
+Accept: application/json
+
+### 1. ERROR DE VALIDACIÓN: Descripción demasiado corta (422)
+# El schema exige min_length=10
+POST http://localhost:8000/api/reclamos
+Content-Type: application/json
+
+{
+    "contrato_id": 1,
+    "descripcion": "Roto",
+    "status": true
+}
+
+### 2. ERROR DE TIPO: Enviar un string donde va un número (422)
+# El contrato_id debe ser un entero
+POST http://localhost:8000/api/reclamos
+Content-Type: application/json
+
+{
+    "contrato_id": "UNO",
+    "descripcion": "La canilla de la cocina no cierra bien.",
+    "status": true
+}
+
+### 3. ERROR DE NEGOCIO: Contrato inexistente (404)
+# El service validará que el contrato exista antes de crear
+POST http://localhost:8000/api/reclamos
+Content-Type: application/json
+
+{
+    "contrato_id": 999999,
+    "descripcion": "Reclamo para un contrato que no existe en la DB.",
+    "status": true
+}
+
+### 4. ERROR DE RUTA: Actualizar un reclamo que no existe (404)
+# Disparará el NotFoundError del Service genérico
+PUT http://localhost:8000/api/reclamos/999999
+Content-Type: application/json
+
+{
+    "status": false
+}
+
+### 5. ERROR DE PARÁMETRO: ID negativo (422)
+# El Path(..., ge=1) del controlador bloqueará esto
+DELETE http://localhost:8000/api/reclamos/-5
+Accept: application/json
+
+### 6. ERROR DE FILTRO: Parámetro no permitido (422)
+# El extra: "forbid" del ReclamoFiltros lanzará error por usar 'color'
+GET http://localhost:8000/api/reclamos?color=rojo
+Accept: application/json
+
+### 7. ERROR DE FORMATO: JSON mal formado (400/422)
+# Falta una coma o una llave, disparará error de parsing
+POST http://localhost:8000/api/reclamos
+Content-Type: application/json
+
+{
+    "contrato_id": 1
+    "descripcion": "JSON sin coma"
+}

@@ -17,8 +17,6 @@ class EdificioActualizar(BaseModel):
     status: Optional[bool] = None
     direccion: Optional[str] = Field(default=None, max_length=100)
 
-
-
 class EdificioRespuesta(BaseModel):
     id: int
     nombre: str

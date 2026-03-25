@@ -1,4 +1,3 @@
-
 class AppRoutes:
     DEPARTAMENTOS = '/api/departamentos'
     EDIFICIOS = '/api/edificios'

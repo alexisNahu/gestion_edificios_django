@@ -78,7 +78,8 @@ Content-Type: application/json
 DELETE http://localhost:8000/api/contratos/99999
 Content-Type: application/json
 
-### POST http://localhost:8000/api/contratos
+### 10. Crear contrato con departamento ocupado
+POST http://localhost:8000/api/contratos
 Content-Type: application/json
 
 {

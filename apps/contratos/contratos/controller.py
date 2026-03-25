@@ -1,5 +1,6 @@
+from http import HTTPStatus
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Body, Path
 
 from apps.contratos.contratos.schema import (
     ContratoRespuesta,
@@ -7,14 +8,14 @@ from apps.contratos.contratos.schema import (
     ContratoActualizar
 )
 from apps.contratos.contratos.services import ContratosService
+from core.constants import AppRoutes
 from core.exceptions import ApiError
-from core.routes import AppRoutes
 from core.schemas import ApiResponse
 
 # Usamos contratos_router para seguir tu convención de nombres
-contratos_router = APIRouter(tags=['contratos'])
+router = APIRouter(tags=['contratos'])
 
-@contratos_router.get(
+@router.get(
     AppRoutes.CONTRATOS,
     # Usamos list[ContratoRespuesta] para que FastAPI sepa que devolvemos una colección
     response_model=ApiResponse[list[ContratoRespuesta]],
@@ -31,7 +32,6 @@ async def get_contratos(
         page_size: int = Query(default=10, ge=1, le=100),
         contratos_service: ContratosService = Depends(ContratosService)
 ):
-    try:
         # Pasamos los filtros al service genérico
         response = await contratos_service.get(
             id=id,
@@ -51,64 +51,39 @@ async def get_contratos(
             status_code=200
         )
 
-    except ApiError as e:
-        raise HTTPException(
-            status_code=e.status_code,
-            detail={"msg": "Error obteniendo contratos", "details": e.detail, "status_code": e.status_code}
-        )
-
-@contratos_router.post(
+@router.post(
     AppRoutes.CONTRATOS,
     response_model=ApiResponse[ContratoRespuesta],
-    status_code=201
+    status_code=HTTPStatus.CREATED
 )
 async def create_contrato(
-        payload: ContratoCrear,
+        payload: ContratoCrear = Body(...),
         contratos_service: ContratosService = Depends(ContratosService)
 ):
-    try:
-        # El validador de fechas del schema se ejecutará antes de entrar aquí
         contrato = await contratos_service.create(payload)
-        return ApiResponse(msg="Contrato creado exitosamente", data=contrato, status_code=201)
-    except ApiError as e:
-        raise HTTPException(
-            status_code=e.status_code,
-            detail={"msg": "Error creando contrato", "details": e.detail, "status_code": e.status_code}
-        )
+        return ApiResponse(msg="Contrato creado exitosamente", data=contrato, status_code=HTTPStatus.CREATED)
 
-@contratos_router.put(
+@router.put(
     f"{AppRoutes.CONTRATOS}/{{id}}",
     response_model=ApiResponse[ContratoRespuesta],
-    status_code=200
+    status_code=HTTPStatus.OK
 )
 async def update_contrato(
-        id: int,
-        payload: ContratoActualizar,
+        id: int = Path(..., ge=1),
+        payload: ContratoActualizar = Body(...),
         contratos_service: ContratosService = Depends(ContratosService)
 ):
-    try:
         contrato = await contratos_service.update(id, payload)
-        return ApiResponse(msg="Contrato actualizado correctamente", data=contrato, status_code=200)
-    except ApiError as e:
-        raise HTTPException(
-            status_code=e.status_code,
-            detail={"msg": "Error actualizando contrato", "details": e.detail, "status_code": e.status_code}
-        )
+        return ApiResponse(msg="Contrato actualizado correctamente", data=contrato, status_code=HTTPStatus.OK)
 
-@contratos_router.delete(
+@router.delete(
     f"{AppRoutes.CONTRATOS}/{{id}}",
     response_model=ApiResponse[ContratoRespuesta],
     status_code=200
 )
 async def delete_contrato(
-        id: int,
+        id: int = Path(..., ge=1),
         contratos_service: ContratosService = Depends(ContratosService)
 ):
-    try:
         contrato = await contratos_service.delete(id)
         return ApiResponse(msg="Contrato eliminado correctamente", data=contrato, status_code=200)
-    except ApiError as e:
-        raise HTTPException(
-            status_code=e.status_code,
-            detail={"msg": "Error eliminando contrato", "details": e.detail, "status_code": e.status_code}
-        )

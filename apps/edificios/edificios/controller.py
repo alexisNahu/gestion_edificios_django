@@ -1,17 +1,16 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Path, Body
 
 from apps.edificios.edificios.schema import EdificioRespuesta, EdificioCrear, EdificioActualizar
 from apps.edificios.edificios.services import EdificiosService
 from apps.edificios.models import Edificios
-from core.exceptions import ApiError
-from core.routes import AppRoutes
+from core.constants import AppRoutes
 from core.schemas import ApiResponse
 
-edificios_router = APIRouter(tags=['edificios'])
+router = APIRouter(tags=['edificios'])
 
-@edificios_router.get(AppRoutes.EDIFICIOS, response_model=ApiResponse[list[EdificioRespuesta]], status_code=200)
+@router.get(AppRoutes.EDIFICIOS, response_model=ApiResponse[list[EdificioRespuesta]], status_code=200)
 async def get_edificios(
         id: Optional[int] = Query(default=None, ge=1),
         nombre: Optional[str] = Query(default=None, max_length=50),
@@ -21,7 +20,6 @@ async def get_edificios(
         page_size: int = Query(default=10, ge=1, le=100),
         edificios_service: EdificiosService = Depends(EdificiosService)
 ):
-    try:
         response: ApiResponse[Edificios] = await edificios_service.get(
             id=id,
             nombre=nombre,
@@ -33,53 +31,28 @@ async def get_edificios(
 
         return ApiResponse(msg="Edificios obtenidos correctamente", data=response['data'], pagination=response['pagination'], status_code=200)
 
-    except ApiError as e:
-        raise HTTPException(
-            status_code=e.status_code,
-            detail={"msg": "Error obteniendo edificios", "details": e.detail, "status_code": e.status_code}
-        )
-
-@edificios_router.post(AppRoutes.EDIFICIOS, response_model=ApiResponse[EdificioRespuesta], status_code=201)
+@router.post(AppRoutes.EDIFICIOS, response_model=ApiResponse[EdificioRespuesta], status_code=201)
 async def create_edificio(
-        payload: EdificioCrear,
+        payload: EdificioCrear = Body(...),
         edificios_service: EdificiosService = Depends(EdificiosService)
 ):
-    try:
-
         edificio: Edificios = await edificios_service.create(payload)
         return ApiResponse(msg="Edificio creado", data=edificio, status_code=201)
-    except ApiError as e:
-        raise HTTPException(
-            status_code=e.status_code,
-            detail={"msg": "Error creando edificios", "details": e.detail, "status_code": e.status_code}
-        )
 
-@edificios_router.put(f"{AppRoutes.EDIFICIOS}/{{id}}", response_model=ApiResponse[EdificioRespuesta], status_code=200)
+@router.put(f"{AppRoutes.EDIFICIOS}/{{id}}", response_model=ApiResponse[EdificioRespuesta], status_code=200)
 async def update_edificio(
-        id: int,
-        payload: EdificioActualizar,
+        id: int = Path(..., ge=1),
+        payload: EdificioActualizar = Body(...),
         edificios_service: EdificiosService = Depends(EdificiosService)
 ):
-    try:
         edificio: Edificios = await edificios_service.update(id, payload)
         return ApiResponse(msg="Edificio actualizado", data=edificio, status_code=200)
-    except ApiError as e:
-        raise HTTPException(
-            status_code=e.status_code,
-            detail={"msg": "Error actualizando edificio", "details": e.detail, "status_code": e.status_code}
-        )
 
-@edificios_router.delete(f"{AppRoutes.EDIFICIOS}/{{id}}", response_model=ApiResponse[EdificioRespuesta], status_code=200)
+@router.delete(f"{AppRoutes.EDIFICIOS}/{{id}}", response_model=ApiResponse[EdificioRespuesta], status_code=200)
 async def delete_edificio(
-        id: int,
+        id: int = Path(..., ge=1),
         edificios_service: EdificiosService = Depends(EdificiosService)
 ):
-    try:
         response: Edificios = await edificios_service.delete(id)
         return ApiResponse(msg="Edificio eliminado correctamente", data=response, status_code=200)
-    except ApiError as e:
-        raise HTTPException(
-            status_code=e.status_code,
-            detail={"msg": "Error eliminando edificio", "details": e.detail, "status_code": e.status_code}
-        )
 

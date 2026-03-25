@@ -4,7 +4,7 @@ from django.db import models
 class Reclamos(models.Model):
     contrato = models.ForeignKey(
         'contratos.Contratos',
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         null=False,
         blank=False,
         db_column='contrato_id',

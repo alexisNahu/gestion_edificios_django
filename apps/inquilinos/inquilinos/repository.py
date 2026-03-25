@@ -1,6 +1,6 @@
 
 from apps.inquilinos.models import Inquilinos
-from core.repository import Repository
+from core.base.repository import Repository
 
 
 class InquilinosRepository(Repository[Inquilinos]):

@@ -37,7 +37,7 @@ class InquilinoRespuesta(BaseModel):
 class InquilinoFiltros(BaseModel):
     nombre_completo: Optional[str] = Field(default=None, max_length=60)
     status: Optional[bool] = None
-    numero_identificacion: Optional[int] = None
+    numero_identificacion: Optional[str] = None
     tipo_identificacion: Optional[TipoIdentificacion] = None
     page: Optional[int] = Field(default=1)
     page_size: Optional[int] = Field(default=10)

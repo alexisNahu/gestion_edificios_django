@@ -1,5 +1,5 @@
 from apps.contratos.models import Contratos
-from core.repository import Repository
+from core.base.repository import Repository
 
 
 class ContratosRepository(Repository[Contratos]):
