@@ -1,4 +1,5 @@
 class AppRoutes:
+    DEUDAS = '/api/deudas'
     DEPARTAMENTOS = '/api/departamentos'
     EDIFICIOS = '/api/edificios'
     INQUILINOS = '/api/inquilinos'
