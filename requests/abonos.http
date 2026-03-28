@@ -1,0 +1,92 @@
+### ==========================================
+### PETICIONES CORRECTAS (SUCCESS)
+### ==========================================
+
+### 1. Obtener todos los abonos (Paginado)
+GET http://localhost:8000/api/abonos?page=1&page_size=10
+Accept: application/json
+
+### 2. Filtrar abonos de un PAGO específico
+GET http://localhost:8000/api/abonos?pago_id=1
+Accept: application/json
+
+### 3. Filtrar por TIPO de pago (Efectivo, Transferencia, Tarjeta)
+GET http://localhost:8000/api/abonos?tipo_pago=transferencia
+Accept: application/json
+
+### 4. Filtrar por AYUDA de depósito (Boolean)
+GET http://localhost:8000/api/abonos?ayuda_dep=true
+Accept: application/json
+
+### 5. Registrar un nuevo Abono
+# Nota: El pago_id debe existir en tu tabla 'pagos'
+# Esto disparará el save() en Django y actualizará 'monto_pagado' en Pagos
+POST http://localhost:8000/api/abonos
+Content-Type: application/json
+
+{
+    "pago_id": 1,
+    "monto": 500000.00,
+    "tipo_pago": "efectivo",
+    "descripcion": "Entrega parcial en efectivo",
+    "ayuda_dep": false
+}
+
+### 6. Actualizar un Abono
+# Reemplaza el /1/ por el ID real de un abono
+PUT http://localhost:8000/api/abonos/1
+Content-Type: application/json
+
+{
+    "tipo_pago": "transferencia",
+    "descripcion": "Corrección: fue transferencia bancaria"
+}
+
+### ==========================================
+### PETICIONES CON ERROR (VALIDACIÓN Y LÓGICA)
+### ==========================================
+
+### 7. ERROR 422: Tipo de pago inválido
+# Solo se permite 'efectivo', 'transferencia' o 'tarjeta' (Literal en Schema)
+POST http://localhost:8000/api/abonos
+Content-Type: application/json
+
+{
+    "pago_id": 1,
+    "monto": 100000,
+    "tipo_pago": "cripto",
+    "descripcion": "Este tipo no existe en los choices"
+}
+
+### 8. ERROR 422: Monto inválido (Cero o Negativo)
+POST http://localhost:8000/api/abonos
+Content-Type: application/json
+
+{
+    "pago_id": 1,
+    "monto": 0,
+    "tipo_pago": "efectivo"
+}
+
+### 9. ERROR 404: Pago no existe
+# El Service lanzará NotFoundError si el pago_id no existe en la DB
+POST http://localhost:8000/api/abonos
+Content-Type: application/json
+
+{
+    "pago_id": 9999,
+    "monto": 150000,
+    "tipo_pago": "tarjeta"
+}
+
+### 10. ERROR 404: Actualizar abono inexistente
+PUT http://localhost:8000/api/abonos/9999
+Content-Type: application/json
+
+{
+    "monto": 200000
+}
+
+### 11. ERROR 422: ID mal formado en URL
+DELETE http://localhost:8000/api/abonos/xyz
+Accept: application/json

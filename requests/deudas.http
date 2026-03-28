@@ -1,0 +1,93 @@
+### ==========================================
+### PETICIONES CORRECTAS (SUCCESS)
+### ==========================================
+
+### 1. Obtener todas las deudas (Paginado)
+GET http://localhost:8000/api/deudas?page=1&page_size=10
+Accept: application/json
+
+### 2. Filtrar deudas PENDIENTES (Usando alias fecha_final__isnull)
+GET http://localhost:8000/api/deudas?status=1
+Accept: application/json
+
+### 3. Filtrar por rango de MONTO (Alias monto_min y monto_max)
+GET http://localhost:8000/api/deudas?monto_min=500000&monto_max=2000000
+Accept: application/json
+
+### 4. Filtrar por FECHA de inicio y MOTIVO específico
+GET http://localhost:8000/api/deudas?desde=2026-03-25&motivo=Departamentos
+Accept: application/json
+
+### 5. Crear una nueva deuda
+# Nota: El contrato_id 1 debe existir en tu DB
+POST http://localhost:8000/api/deudas
+Content-Type: application/json
+
+{
+    "contrato_id": 8,
+    "motivo": "Departamento",
+    "monto": 1800000,
+    "status": 1,
+    "fecha_comienzo": "2026-03-25"
+}
+
+### 6. Actualizar una deuda (Marcar como cerrada/pagada)
+# Reemplaza el /1/ por el ID real de una deuda
+PUT http://localhost:8000/api/deudas/1
+Content-Type: application/json
+
+{
+    "status": 1,
+    "fecha_final": "2026-03-26"
+}
+
+### ==========================================
+### PETICIONES CON ERROR (VALIDACIÓN Y LÓGICA)
+### ==========================================
+
+### 7. ERROR 422: Motivo inválido
+# Solo se permite 'Departamento' o 'Ande'
+POST http://localhost:8000/api/deudas
+Content-Type: application/json
+
+{
+    "contrato_id": 1,
+    "motivo": "Expensas",
+    "monto": 100000,
+    "fecha_comienzo": "2026-03-25"
+}
+
+### 8. ERROR 422: Monto inválido (Negativo)
+POST http://localhost:8000/api/deudas
+Content-Type: application/json
+
+{
+    "contrato_id": 1,
+    "motivo": "Ande",
+    "monto": -5000,
+    "fecha_comienzo": "2026-03-25"
+}
+
+### 9. ERROR 404: Contrato no existe
+# El Service lanzará NotFoundError si el ID de contrato no existe
+POST http://localhost:8000/api/deudas
+Content-Type: application/json
+
+{
+    "contrato_id": 9999,
+    "motivo": "Departamento",
+    "monto": 1500000,
+    "fecha_comienzo": "2026-03-25"
+}
+
+### 10. ERROR 404: Actualizar deuda inexistente
+PUT http://localhost:8000/api/deudas/9999
+Content-Type: application/json
+
+{
+    "status": 0
+}
+
+### 11. ERROR 422: ID mal formado en URL
+DELETE http://localhost:8000/api/deudas/abc
+Accept: application/json

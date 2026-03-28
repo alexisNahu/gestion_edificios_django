@@ -1,0 +1,84 @@
+### ==========================================
+### PETICIONES CORRECTAS (SUCCESS)
+### ==========================================
+
+### 1. Obtener todos los pagos (Paginado)
+GET http://localhost:8000/api/pagos?page=1&page_size=10
+Accept: application/json
+
+### 2. Filtrar pagos por CONTRATO específico
+GET http://localhost:8000/api/pagos?contrato_id=1
+Accept: application/json
+
+### 3. Filtrar pagos por STATUS (Activos/Inactivos)
+GET http://localhost:8000/api/pagos?status=true
+Accept: application/json
+
+### 4. Buscar en la DESCRIPCIÓN (Usando alias nota)
+# Busca pagos que mencionen "Marzo" en el texto
+GET http://localhost:8000/api/pagos?nota=Marzo
+Accept: application/json
+
+### 5. Registrar un nuevo Pago
+# Nota: El monto_pagado suele iniciar en 0 hasta que se registren abonos
+POST http://localhost:8000/api/pagos
+Content-Type: application/json
+
+{
+    "contrato_id": 8,
+    "monto_pagado": 100.00,
+    "status": true,
+    "descripcion": "Canon mensual correspondiente a Marzo 2026"
+}
+
+### 6. Actualizar un Pago
+# Reemplaza el /1/ por el ID real de un pago
+PUT http://localhost:8000/api/pagos/1
+Content-Type: application/json
+
+{
+    "status": false,
+    "descripcion": "Pago anulado por error de carga"
+}
+
+### ==========================================
+### PETICIONES CON ERROR (VALIDACIÓN Y LÓGICA)
+### ==========================================
+
+### 7. ERROR 422: Monto pagado inválido (Negativo)
+POST http://localhost:8000/api/pagos
+Content-Type: application/json
+
+{
+    "contrato_id": 1,
+    "monto_pagado": -1500.50,
+    "status": true
+}
+
+### 8. ERROR 404: Contrato no existe
+# El Service validará que el contrato_id exista antes de crear el pago
+POST http://localhost:8000/api/pagos
+Content-Type: application/json
+
+{
+    "contrato_id": 99999,
+    "monto_pagado": 0,
+    "status": true
+}
+
+### 9. ERROR 422: Campo obligatorio faltante (contrato_id)
+POST http://localhost:8000/api/pagos
+Content-Type: application/json
+
+{
+    "monto_pagado": 100000,
+    "status": true
+}
+
+### 10. ERROR 404: Borrar pago inexistente
+DELETE http://localhost:8000/api/pagos/999999
+Accept: application/json
+
+### 11. ERROR 422: Formato de ID incorrecto
+GET http://localhost:8000/api/pagos/pago_uno
+Accept: application/json
